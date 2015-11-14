@@ -22,25 +22,25 @@ namespace TwitterApplication
             {
                 System.Console.WriteLine("Empty User File");
             }
-            {                
+            {
                 foreach (string line in userLines)
                 {
-                    string[] words = line.Split(new[] { ',' , ' '}, StringSplitOptions.RemoveEmptyEntries);
+                    string[] words = line.Split(new[] { ',', ' ' }, StringSplitOptions.RemoveEmptyEntries);
 
                     /// Check if line has User Follows User++ Format
                     if ((words[1].Equals("follows")) && (words.Length >= 3))
                     {
                         AddUserLine(words);
-
-
-                        Console.Write("User: " + words[0]);
-                        Console.Write("Follows Token: " + words[1]);
-                        Console.Write("Next User: " + words[2]);
                     }
                     else
-                        Console.Write("Invalid Line");                
+                        Console.Write("Invalid Line");
                     Console.WriteLine("\n");
                 }
+
+                //// TEST PRINOUT
+                foreach (User user in userList)
+                    Console.WriteLine(user.ToString());
+
             }
         }
 
@@ -53,78 +53,64 @@ namespace TwitterApplication
         /// <param name="words"></param>
         public void AddUserLine(string[] words)
         {
-            string newUser = words[0];               
+            string newUser = words[0];
             List<string> newFollowsList = new List<string>(words);
             newFollowsList.RemoveAt(0);   /// Remove the User Name
             newFollowsList.RemoveAt(0);   /// Remove the "follows" token           
 
-            ///// 1st Case,  the userList is empty
-            //if (userList.Count == 0)
-            //{
+            int userPosition = checkUserExists(newUser);
 
-            //    createUserWithList(newUser, newFollowsList);
+            
 
-            //    foreach (string follow in newFollowsList)
-            //    {
-            //        createUserEmptyList(follow);
-            //    }
-
-            //}
-            //else
-                ///2nd Case, the User is Old && We check the follows Exist
+            /// 1st Case
+            /// if userPosition IS FOUND, then the user already exists and we add the new follows and to the user list
+            /// if userPosition IS NOT FOUND, we add the new user and their follows to the follows and to the user list
+            if (userPosition != notFound)
             {
-                int userPosition = checkUserExists(newUser);
+                User oldUser = userList.ElementAt(userPosition);
 
-                /// if userPosition IS NOT -1 then the user already exists and we add the new follows and to the user list
-                /// if userPosition IS  -1, we add the new user and their follows to the follows and to the user list
-
-                if (userPosition != notFound)
+                /// If A follow IS NOT in the follows list, then we do Add to follows lsit and check if is a User
+                foreach (string follow in newFollowsList)
                 {
-                    User oldUser = userList.ElementAt(userPosition);
+                    /// If user follows a new User
+                    if (!oldUser.userFollows(follow))
+                        oldUser.follows.Add(follow);
 
-                    /// If A follow IS NOT in the follows list, then we do Add to follows lsit and check if is a User
-                    foreach (string follow in newFollowsList)
+                    int followUserPosition = checkUserExists(follow);
+
+                    /// If the follow is not a User, we Create a new User from follow
+                    if (followUserPosition == notFound)
+                        createUserEmptyList(follow);
+
+                }   ///foreach (string follow in newFollowList)
+            }   /// If (userPosition != -1) ie: User is currently in the userList
+            else
+            //3nd Case, the User is NEW && We check the follows Exist
+            {
+                createUserWithList(newUser, newFollowsList);
+
+                foreach (string follow in newFollowsList)
+                {
+                    int followUserPosition = checkUserExists(follow);
+                    /// If the follow is not a User, we Create a new User from follow
+                    if (followUserPosition == notFound)
                     {
-                        /// If user follows a new User
-                        if (!oldUser.userFollows(follow))                                          
-                            oldUser.follows.Add(follow);
-
-                        int followUserPosition = checkUserExists(follow);   
-
-                        /// If the follow is not a User, we Create a new User from follow
-                        if (followUserPosition == notFound)                        
-                            createUserEmptyList(follow);
-                                                
-                    }   ///foreach (string follow in newFollowList)
-                }   /// If (userPosition != -1) ie: User is currently in the userList
-                else
-                //3nd Case, the User is NEW && We check the follows Exist
-                {                    
-                    createUserWithList(newUser, newFollowsList);
-
-                    foreach (string follow in newFollowsList)
-                    {
-                        int followUserPosition = checkUserExists(follow);
-                        /// If the follow is not a User, we Create a new User from follow
-                        if (followUserPosition == notFound)
-                        {
-                            createUserEmptyList(follow);
-                        }
-                    }   ///foreach (string follwoer in newFollowes)
-                } /// NEW USER Found and Check follows for exist                
-            }                        
+                        createUserEmptyList(follow);
+                    }
+                }   ///foreach (string follwoer in newFollowes)
+            } /// NEW USER Found and Check follows for exist                
         }
 
         /// <summary>
-        /// Checks the current userList and returns the position of the username if found
-        /// If username is NOT in the list, return -1
+        /// Checks the current userList and returns the position of the User if found
+        /// If username is NOT in the list, return NOT FOUND
         /// </summary>
         /// <param name="username"></param>
         /// <param name="follow"></param>
         /// <returns></returns>
         public int checkUserExists(string username)
         {
-            int position = notFound; 
+            int position = notFound;
             int index = 0;
 
             while (index < userList.Count)
@@ -136,8 +122,7 @@ namespace TwitterApplication
                 }
                 else
                     index++;
-            }
-            //User currentUser  = userList.se
+            }            
             return position;
         }
 
@@ -155,8 +140,6 @@ namespace TwitterApplication
             newUserObject.follows = followsList;
             userList.Add(newUserObject);
         }
-
-
 
         /// <summary>
         /// 

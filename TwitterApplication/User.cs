@@ -17,6 +17,21 @@ namespace TwitterApplication
                 return true;
             else
                 return false;
-        }       
+        }
+
+        public override string  ToString()
+        {
+            return userName + " follows " + printFollows();
+        }
+
+        public string printFollows()
+        {
+            string output = null;
+            foreach (string follow in follows)
+                output += follow + ", ";
+
+            return output;
+
+        }
     }
 }

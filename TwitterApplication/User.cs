@@ -11,7 +11,7 @@ namespace TwitterApplication
 
         public List<string> follows = new List<string>();
 
-        public bool userHasfollow(string follow)
+        public bool userFollows(string follow)
         {
             if (follows.Contains(follow))
                 return true;

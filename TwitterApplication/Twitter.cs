@@ -8,7 +8,9 @@ namespace TwitterApplication
     class Twitter
     {
         private List<User> userList = new List<User>();
+        private List<Tweet> tweets = new List<Tweet>();
         private const int notFound = -1;        /// 
+        private const int messageMax = 140;
 
         /// <summary>
         /// Loads the User Text File and checks if its valid and creates Users List
@@ -33,22 +35,14 @@ namespace TwitterApplication
                         AddUserLine(words);
                     }
                     else
-                        Console.Write("Invalid Line");
-                    Console.WriteLine("\n");
+                        Console.Write("Invalid Line");                   
                 }
-
-                //// TEST PRINOUT
-                foreach (User user in userList)
-                    Console.WriteLine(user.ToString());
-
             }
         }
 
         /// <summary>
-        /// 1. First we Check to see if User is Empty -> Then we add user and follows && make follows users
-        /// 2. If NOT, we check is User is new -> then we Add user and follows && check if follows are new
-        ///-- 3. If NOT, We follows to that list
-        ///-- 3. Otherwise we Insert A new User follow line
+        /// 1. First we Check to see if User is OLD in the List, then add follow users (but first check if exists)        
+        /// 2. If NOT, we check is User is NEW -> then we Add user and follows && check if follows are NEW
         /// </summary>
         /// <param name="words"></param>
         public void AddUserLine(string[] words)
@@ -59,7 +53,6 @@ namespace TwitterApplication
             newFollowsList.RemoveAt(0);   /// Remove the "follows" token           
 
             int userPosition = checkUserExists(newUser);
-
             
 
             /// 1st Case
@@ -85,7 +78,7 @@ namespace TwitterApplication
                 }   ///foreach (string follow in newFollowList)
             }   /// If (userPosition != -1) ie: User is currently in the userList
             else
-            //3nd Case, the User is NEW && We check the follows Exist
+            //2nd Case, the User is NEW && We check the follows Exist
             {
                 createUserWithList(newUser, newFollowsList);
 
@@ -149,18 +142,88 @@ namespace TwitterApplication
         {
             string[] tweetLines = System.IO.File.ReadAllLines(tweetFile);
 
-            System.Console.WriteLine("Tweets found = " + tweetLines.Length);
-
             foreach (string line in tweetLines)
             {
-                Console.WriteLine(line + "\n");
+                if (isValidTweet(line))
+                {
+                    Tweet newUserTweet = new Tweet();
+                    newUserTweet.userName = getUserNameFromTweetLine(line);
+                    newUserTweet.message = getUserMessageFromTweetLine(line);
+                    tweets.Add(newUserTweet);
+                }
             }
+        }
+
+        /// <summary>
+        /// Assuming Valid tweet if Username is not BLANK and > is present
+        /// 
+        /// </summary>
+        /// <param name="tweetLine"></param>
+        /// <returns></returns>
+        public bool isValidTweet(string tweetLine)
+        {
+            int gts = tweetLine.IndexOf('>');
+
+            string userName = tweetLine.Substring(0, gts);
+            string message = tweetLine.Substring(gts, tweetLine.Length - gts);
+
+            if (gts !=0 && !userName.Equals(" ") && message != null)
+                return true;
+            else
+                return false;
+        }
+
+        public string getUserNameFromTweetLine(string tweetLine)
+        {
+            int gts = tweetLine.IndexOf('>');
+
+            string userName = tweetLine.Substring(0, gts);
+
+            return userName;
+        }
+
+        public string getUserMessageFromTweetLine(string tweetLine)
+        {
+            int gts = tweetLine.IndexOf('>');
+            int gtspadding = 2;
+
+            string message = tweetLine.Substring(gts + gtspadding, tweetLine.Length - gts - gtspadding);
+
+            if (message.Length > messageMax)
+                return message.Substring(0, messageMax);
+            else
+                return message;
         }
 
         public void LoadFiles(string userFile, string tweetfile)
         {
             loadUserFile(userFile);
             loadTweetFile(tweetfile);
+        }
+
+        public void PrintTweets()
+        {
+            /// C# Sorted list by using LINQ to orderBy (object username) -> List again
+            List<User> SortedList = userList.OrderBy(o => o.userName).ToList(); 
+            
+            foreach (User user in SortedList)
+            {
+                Console.WriteLine(user.userName);
+
+                foreach (Tweet tweet in tweets)
+                {
+                    if (tweet.userName.Equals(user.userName))
+                        Console.WriteLine("\t@" + user.userName + ":" + tweet.message);
+                    else
+                        
+
+                    foreach (string follow in user.follows)
+                    {
+                        if (tweet.userName.Equals(follow))
+                            Console.WriteLine("\t@" + follow + ":" + tweet.message);
+                    }
+                }               
+            }
         }
     }
 }

@@ -18,6 +18,7 @@ namespace TwitterApplication
                 Twitter TwitterApp = new Twitter();
 
                 TwitterApp.LoadFiles(args[0], args[1]);
+                TwitterApp.PrintTweets();
             }
             //Console.Read();
         }

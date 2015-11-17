@@ -7,8 +7,8 @@ namespace TwitterApplication
 {
     class Twitter
     {
-        private List<User> userList = new List<User>();
-        private List<Tweet> tweets = new List<Tweet>();
+        public List<User> userList = new List<User>();
+        public List<Tweet> tweets = new List<Tweet>();
         private const int notFound = -1;        /// 
         private const int messageMax = 140;
 

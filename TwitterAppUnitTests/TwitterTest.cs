@@ -3,6 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using Moq;
 
 namespace TwitterAppUnitTests
 {
@@ -66,16 +67,6 @@ namespace TwitterAppUnitTests
 
 
         /// <summary>
-        ///A test for Twitter Constructor
-        ///</summary>        
-
-        public void TwitterConstructorTest()
-        {
-            Twitter target = new Twitter();
-            Assert.Inconclusive("TODO: Implement code to verify target");
-        }
-
-        /// <summary>
         ///A test for AddUserLine
         ///</summary>
         [TestMethod()]
@@ -93,13 +84,12 @@ namespace TwitterAppUnitTests
         [TestMethod()]
         public void checkUserExistsTest()
         {
-            Twitter target = new Twitter(); // TODO: Initialize to an appropriate value
-            string username = "Alan"; // TODO: Initialize to an appropriate value
-            int expected = 0; // TODO: Initialize to an appropriate value
+            Twitter target = new Twitter(); 
+            string username = "Alan"; 
+            int expected = 1; 
             int actual;
             actual = target.checkUserExists(username);
-            Assert.AreEqual(expected, actual);
-            Assert.Inconclusive("Verify the correctness of this test method.");
+            Assert.AreEqual(expected, actual);      
         }
 
         /// <summary>
@@ -115,7 +105,8 @@ namespace TwitterAppUnitTests
             var userPath = Path.Combine(assemblyPath, "user.txt");
             var tweetPath = Path.Combine(assemblyPath, "tweet.txt");
           
-            target.LoadFiles(userPath, tweetPath);            
+            target.LoadFiles(userPath, tweetPath);  
+            
         }
 
         /// <summary>
@@ -124,10 +115,11 @@ namespace TwitterAppUnitTests
         [TestMethod()]
         public void createUserEmptyListTest()
         {
-            Twitter target = new Twitter(); // TODO: Initialize to an appropriate value
-            string userName = "Martin"; // TODO: Initialize to an appropriate value
+            Twitter target = new Twitter(); 
+            string userName = "Martin"; 
+            int oldSize = target.userList.Count;
             target.createUserEmptyList(userName);
-            //Assert.Fail("User Not Found in the System List");
+            Assert.AreNotEqual(oldSize, target.userList.Count);            
         }
 
         /// <summary>
@@ -136,11 +128,12 @@ namespace TwitterAppUnitTests
         [TestMethod()]
         public void createUserWithListTest()
         {
-            Twitter target = new Twitter(); // TODO: Initialize to an appropriate value
-            string newUser = string.Empty; // TODO: Initialize to an appropriate value
-            List<string> followsList = null; // TODO: Initialize to an appropriate value
-            target.createUserWithList(newUser, followsList);
-            Assert.Inconclusive("A method that does not return a value cannot be verified.");
+            Twitter target = new Twitter(); 
+            string newUser = "Ward"; 
+            int oldSize = target.userList.Count;
+            List<string> followsList = new List<string> {"Alan"}; 
+            target.createUserWithList(newUser, followsList);            
+            Assert.AreNotEqual(oldSize, target.userList.Count);
         }
 
         /// <summary>

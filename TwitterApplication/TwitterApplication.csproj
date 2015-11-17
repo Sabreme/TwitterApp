@@ -49,6 +49,13 @@
     <Compile Include="Twitter.cs" />
     <Compile Include="User.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="TwitterAppClassDiagram.cd" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="tweet2.txt" />
+    <Content Include="user2.txt" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

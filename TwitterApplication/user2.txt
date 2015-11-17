@@ -1,0 +1,9 @@
+Ward follows Alan
+Alan follows Martin
+Ward follows Martin, Alan
+Lisa follows James
+Mark follows James
+Jill follows Ben
+Jack follows Ben
+Ben follows Mark
+Mike follows Ward

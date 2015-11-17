@@ -67,8 +67,7 @@ namespace TwitterAppUnitTests
 
         /// <summary>
         ///A test for Twitter Constructor
-        ///</summary>
-        [TestMethod()]        
+        ///</summary>        
 
         public void TwitterConstructorTest()
         {
@@ -95,7 +94,7 @@ namespace TwitterAppUnitTests
         public void checkUserExistsTest()
         {
             Twitter target = new Twitter(); // TODO: Initialize to an appropriate value
-            string username = string.Empty; // TODO: Initialize to an appropriate value
+            string username = "Alan"; // TODO: Initialize to an appropriate value
             int expected = 0; // TODO: Initialize to an appropriate value
             int actual;
             actual = target.checkUserExists(username);
@@ -115,10 +114,7 @@ namespace TwitterAppUnitTests
 
             var userPath = Path.Combine(assemblyPath, "user.txt");
             var tweetPath = Path.Combine(assemblyPath, "tweet.txt");
-
-           
-            string userFile = "user.txt"; // TODO: Initialize to an appropriate value
-            string tweetfile = "tweet.txt"; // TODO: Initialize to an appropriate value
+          
             target.LoadFiles(userPath, tweetPath);            
         }
 
@@ -130,7 +126,8 @@ namespace TwitterAppUnitTests
         {
             Twitter target = new Twitter(); // TODO: Initialize to an appropriate value
             string userName = "Martin"; // TODO: Initialize to an appropriate value
-            target.createUserEmptyList(userName);            
+            target.createUserEmptyList(userName);
+            //Assert.Fail("User Not Found in the System List");
         }
 
         /// <summary>

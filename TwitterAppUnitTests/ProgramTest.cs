@@ -67,7 +67,6 @@ namespace TwitterAppUnitTests
         /// <summary>
         ///A test for Main
         ///</summary>
-        [TestMethod()]
         [DeploymentItem("TwitterApplication.exe")]
         public void MainTest()
         {
@@ -79,7 +78,6 @@ namespace TwitterAppUnitTests
         /// <summary>
         ///A test for Program Constructor
         ///</summary>
-        [TestMethod()]
         public void ProgramConstructorTest()
         {
             Program target = new Program();

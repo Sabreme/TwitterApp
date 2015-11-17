@@ -67,7 +67,6 @@ namespace TwitterAppUnitTests
         /// <summary>
         ///A test for User Constructor
         ///</summary>
-        [TestMethod()]
         public void UserConstructorTest()
         {
             User target = new User();

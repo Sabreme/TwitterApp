@@ -156,7 +156,6 @@ namespace TwitterApplication
 
         /// <summary>
         /// Assuming Valid tweet if Username is not BLANK and > is present
-        /// 
         /// </summary>
         /// <param name="tweetLine"></param>
         /// <returns></returns>
@@ -213,15 +212,10 @@ namespace TwitterApplication
                 foreach (Tweet tweet in tweets)
                 {
                     if (tweet.userName.Equals(user.userName))
-                        Console.WriteLine("\t@" + user.userName + ":" + tweet.message);
-                    else
-                        
-
-                    foreach (string follow in user.follows)
-                    {
-                        if (tweet.userName.Equals(follow))
-                            Console.WriteLine("\t@" + follow + ":" + tweet.message);
-                    }
+                        Console.WriteLine("\t@" + user.userName + ": " + tweet.message);
+                    else                        
+                    if (user.follows.Contains(tweet.userName))
+                        Console.WriteLine("\t@" + tweet.userName + ": " + tweet.message);
                 }               
             }
         }
